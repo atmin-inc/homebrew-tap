@@ -1,0 +1,27 @@
+name: Homebrew
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: Homebrew/actions/setup-homebrew@3b81d438eda92ee13b5849940d993be027717ecf
+      - name: Install checked-out formula
+        run: |
+          brew tap atmin-inc/tap "$GITHUB_WORKSPACE"
+          brew install atmin-inc/tap/atmin
+          brew test atmin-inc/tap/atmin
+          atmin --help
