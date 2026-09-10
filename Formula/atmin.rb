@@ -11,10 +11,10 @@ class Atmin < Formula
   depends_on "node@24"
 
   def install
-    system Formula["node@24"].opt_bin/"npm", "install", *std_npm_args
+    system formula_opt_bin("node@24")/"npm", "install", *std_npm_args
     %w[atmin-review atmin-review-github].each do |command|
       (bin/command).write_env_script libexec/"bin"/command,
-                                    PATH: "#{Formula["node@24"].opt_bin}:$PATH"
+                                    PATH: "#{formula_opt_bin("node@24")}:$PATH"
     end
     bin.install_symlink "atmin-review" => "atmin"
     (share/"atmin").install libexec/"lib/node_modules/@atmin.ai/review/profiles"
